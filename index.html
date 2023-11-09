@@ -1,0 +1,47 @@
+<!-- home page for bird watcher app that allows you to take a picture of a bird -->
+<html>
+    <head>
+        <title>Bird Watch</title>
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <h1>Bird Watch</h1>
+        <p>Take a picture of a bird and we'll tell you what it is.</p>
+        <script>
+            function submitForm() {
+              // Get the file input
+              var fileInput = document.getElementById('image');
+              // Create a new FormData object
+              var formData = new FormData();
+              // Add the file to the FormData
+              formData.append('bird_photo', fileInput.files[0]);
+              // Use the fetch API to send the form data
+              fetch('http://127.0.0.1:80/input-bird-photo', {
+                method: 'POST',
+                body: formData
+              })
+              .then(response => response.json())
+              .then(console.log(response))
+              .then(data => {
+                // Get the response element
+                var responseElem = document.getElementById('response');
+                // Update the innerHTML of the response element
+                responseElem.innerHTML = "There's a "+ data.confidence +"% chance that's a " + data.bird_type + " !";
+              })
+              .catch(error => console.error('Error:', error));
+            }
+          </script>
+          
+        <!-- form that submits a picture to a server and calls a javascript method that will parse the resonse -->
+        <form id="form">
+            <input type="file" name="image" id="image"/>
+            <input type="button" value="Submit" onclick="submitForm()"/>
+          </form>
+            <!-- response element that will be updated with the response from the server -->
+            <!-- Centered h1 tag -->
+          <h1 id="response" style="margin: auto;"></h1>
+          
+        
+
+    </body>
+</html>
